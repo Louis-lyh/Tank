@@ -1,0 +1,14 @@
+.idea/
+TankPlus/*.sln
+TankPlus/Library
+TankPlus/Logs
+TankPlus/Temp
+*.csproj
+obj
+.DS_Store
+.vs
+TankPlus/Recordings/
+TankPlus/Build/
+TankPlus/AssetBundles/Upload
+TankPlus/Assets/StreamingAssets
+TankPlus/Assets/StreamingAssets.meta
