@@ -20,12 +20,12 @@ public class HexGrid : MonoBehaviour
     //画布
     private Canvas _gridCanvas;
     //六边形网格
-    private HexMesh HexMesh;
-
+    private HexMesh _hexMesh;
+    
     private void Awake()
     {
         _gridCanvas = GetComponentInChildren<Canvas>();
-        
+        _hexMesh = GetComponentInChildren<HexMesh>();
         _cells = new HexCell[height * width];
 
         for (int z = 0,i = 0; z < height; z++)
@@ -36,6 +36,12 @@ public class HexGrid : MonoBehaviour
             }
         }
     }
+
+    private void Start()
+    {
+        _hexMesh.Triangulate(_cells);
+    }
+
     /// <summary>
     /// 生成网格
     /// </summary>
@@ -57,13 +63,13 @@ public class HexGrid : MonoBehaviour
         HexCell cell = _cells[i] = Instantiate<HexCell>(cellPrefab);
         cell.transform.SetParent(transform,false);
         cell.transform.localPosition = position;
-        
+        cell.Coordinates = HexCoordinates.FromOffsetCoordinates(x,z);
         //生成坐标文本
         Text label = Instantiate<Text>(cellLabelPrefab);
         label.rectTransform.SetParent(_gridCanvas.transform,false);
         //锚点坐标
         label.rectTransform.anchoredPosition = new Vector2(position.x,position.z);
-        label.text = $"({x},{z})";
+        label.text = cell.Coordinates.ToStringSeparateLines();
     }
     
 }
