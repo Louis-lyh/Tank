@@ -1,7 +1,12 @@
+using System;
 using UnityEngine;
 
-public class HexCell : MonoBehaviour
+namespace Tank.HexMap
 {
-    //坐标
-    public HexCoordinates Coordinates;
+    public class HexCell : MonoBehaviour
+    {
+        //坐标
+        public HexCoordinates Coordinates;
+    }
+
 }
