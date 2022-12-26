@@ -25,7 +25,7 @@ namespace Tank.HexMap
         {
             return  new HexCoordinates(x - z / 2,z);
         }
-    
+        
         public override string ToString()
         {
             return $"({X},{Y},{Z})";
@@ -34,7 +34,17 @@ namespace Tank.HexMap
         public string ToStringSeparateLines()
         {
             return $"{X}\n{Y}\n{Z}";
+            
         }
+        //Vector3转换为六边形坐标系
+        // public static HexCoordinates FromPosition(Vector3 position)
+        // {
+        //     //x水平坐标 = 点击点的x坐标 / 外半径 * 2
+        //     float x = position.x / (HexMetrics.InnerRadius * 2f);
+        //     float y = -x;
+        //     
+        // }
+        
     }
 }
 
