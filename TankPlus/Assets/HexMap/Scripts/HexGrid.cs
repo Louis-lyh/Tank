@@ -21,7 +21,10 @@ namespace Tank.HexMap
         private Canvas _gridCanvas;
         //六边形网格
         private HexMesh _hexMesh;
-        
+        //默认颜色
+        public Color defaultColor = Color.white;
+        //
+        public Color touchedColor = Color.cyan;
         private void Awake()
         {
             _gridCanvas = GetComponentInChildren<Canvas>();
@@ -63,7 +66,10 @@ namespace Tank.HexMap
             HexCell cell = _cells[i] = Instantiate<HexCell>(cellPrefab);
             cell.transform.SetParent(transform,false);
             cell.transform.localPosition = position;
+            //设置坐标系坐标
             cell.Coordinates = HexCoordinates.FromOffsetCoordinates(x,z);
+            //设置颜色
+            cell.color = defaultColor;
             //生成坐标文本
             Text label = Instantiate<Text>(cellLabelPrefab);
             label.rectTransform.SetParent(_gridCanvas.transform,false);
@@ -72,27 +78,36 @@ namespace Tank.HexMap
             label.text = cell.Coordinates.ToString();
         }
 
-        private void Update()
-        {
-            if(Input.GetMouseButton(0))
-                HandleInput();
-        }
-        //点击屏幕
-        void HandleInput()
-        {
-            Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(inputRay, out hit))
-            {
-                TouchCell(hit.point);
-            }
-        }
+     
         //点击方块
-        void TouchCell(Vector3 position)
+        public void TouchCell(Vector3 position)
         {
             position = transform.InverseTransformPoint(position);
-            Debug.Log("touched at" + position);
+            //Vector3转换为六边形坐标系
+            HexCoordinates coordinates = HexCoordinates.FromPosition(position);
+            //计算索引
+            int index = coordinates.X + coordinates.Z * width + coordinates.Z / 2;
+            //
+            HexCell cell = _cells[index];
+            cell.color = touchedColor;
+            //重新计算网格
+            _hexMesh.Triangulate(_cells);
         }
+
+        public void ColorCell(Vector3 position, Color color)
+        {
+            position = transform.InverseTransformPoint(position);
+            //世界坐标转为六边形坐标系
+            HexCoordinates coordinates = HexCoordinates.FromPosition(position);
+            //计算HexCell的索引
+            int index = coordinates.X + coordinates.Z * width + coordinates.Z / 2;
+            //
+            HexCell cell = _cells[index];
+            cell.color = color;
+            //重新计算网格
+            _hexMesh.Triangulate(_cells);
+        }
+        
     }
 }
 

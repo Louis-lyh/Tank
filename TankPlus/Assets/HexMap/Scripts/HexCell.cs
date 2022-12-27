@@ -7,6 +7,8 @@ namespace Tank.HexMap
     {
         //坐标
         public HexCoordinates Coordinates;
+        //
+        public Color color;
     }
 
 }

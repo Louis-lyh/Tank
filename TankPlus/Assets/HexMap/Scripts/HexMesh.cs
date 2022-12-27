@@ -16,6 +16,8 @@ namespace Tank.HexMap
         private List<int> _triangles;
         //网格碰撞体
         private MeshCollider _meshCollider;
+        //顶点颜色
+        private List<Color> _colors;
         private void Awake()
         {
             //网格
@@ -25,6 +27,7 @@ namespace Tank.HexMap
             _hexMesh.name = "Hex Mesh";
             _vertices = new List<Vector3>();
             _triangles = new List<int>();
+            _colors = new List<Color>();
         }
         //三角测量 （计算网格）
         public void Triangulate(HexCell[] cells)
@@ -32,7 +35,8 @@ namespace Tank.HexMap
             _hexMesh.Clear();
             _vertices.Clear();
             _triangles.Clear();
-    
+            _colors.Clear();
+                
             for (int i = 0; i < cells.Length; i++)
             {
                 Triangulate(cells[i]);
@@ -40,6 +44,7 @@ namespace Tank.HexMap
     
             _hexMesh.vertices = _vertices.ToArray();
             _hexMesh.triangles = _triangles.ToArray();
+            _hexMesh.colors = _colors.ToArray();
             //从三角形和顶点重新计算网格的法线。
             _hexMesh.RecalculateNormals();
             //生成网格碰撞器
@@ -52,8 +57,8 @@ namespace Tank.HexMap
             for (int i = 0; i < 6; i++)
             {
                 AddTriangle(center,center + HexMetrics.Corners[i],center + HexMetrics.Corners[(i + 1) % 6]);
+                AddTriangleColor(cell.color);
             }
-    
         }
         //添加三角形
         void AddTriangle(Vector3 v1, Vector3 v2, Vector3 v3)
@@ -65,6 +70,13 @@ namespace Tank.HexMap
             _triangles.Add(vertexIndex);
             _triangles.Add(vertexIndex+1);
             _triangles.Add(vertexIndex+2);
+        }
+        //添加颜色
+        void AddTriangleColor(Color color)
+        {
+            _colors.Add(color);
+            _colors.Add(color);
+            _colors.Add(color);
         }
         
     }
