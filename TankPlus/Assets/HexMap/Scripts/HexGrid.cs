@@ -70,6 +70,27 @@ namespace Tank.HexMap
             cell.Coordinates = HexCoordinates.FromOffsetCoordinates(x,z);
             //设置颜色
             cell.color = defaultColor;
+            //设置邻居
+            if(x > 0) // 左邻居
+                cell.SetNeighbor(HexDirection.W,_cells[i - 1]);
+            if(z > 0)
+                if ((x & 1) == 0) //偶数行
+                {
+                    //右下邻居
+                    cell.SetNeighbor(HexDirection.SE,_cells[i - width]);
+                    //西南 左下邻居
+                    if(x > 0)
+                        cell.SetNeighbor(HexDirection.SW,_cells[i - width - 1]);
+                }
+                else // 奇数行
+                {
+                    //右下邻居
+                    cell.SetNeighbor(HexDirection.W,_cells[i - width]);
+                    //左下令居
+                    if(x < width - 1)
+                        cell.SetNeighbor(HexDirection.SE,_cells[i - width + 1]);
+                }
+            
             //生成坐标文本
             Text label = Instantiate<Text>(cellLabelPrefab);
             label.rectTransform.SetParent(_gridCanvas.transform,false);
